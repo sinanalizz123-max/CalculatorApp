@@ -1,0 +1,17 @@
+Starting a Gradle Daemon (subsequent builds will be faster)
+Configuration on demand is an incubating feature.
+Calculating task graph as no cached configuration is available for tasks: assembleDebug
+
+1 problem was found storing the configuration cache.
+- Task `:app:checkDebugAarMetadata` of type `com.android.build.gradle.internal.tasks.CheckAarMetadataTask`: error writing value of type 'org.gradle.api.internal.artifacts.configurations.DefaultArtifactCollection'
+
+See the complete report at file:///data/data/com.termux/files/home/CalculatorApp/build/reports/configuration-cache/6rrdr3ob6j1k40qkk8inl0pa1/3gvw3fy6vv3n5rk3zaqrmm0c/configuration-cache-report.html
+
+[Incubating] Problems report is available at: file:///data/data/com.termux/files/home/CalculatorApp/build/reports/problems/problems-report.html
+
+Deprecated Gradle features were used in this build, making it incompatible with Gradle 10.
+
+You can use '--warning-mode all' to show the individual deprecation warnings and determine if they come from your own scripts or plugins.
+
+For more on this, please refer to https://docs.gradle.org/9.2.0/userguide/command_line_interface.html#sec:command_line_warnings in the Gradle documentation.
+Configuration cache entry discarded due to serialization error.
