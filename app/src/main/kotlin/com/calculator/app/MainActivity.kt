@@ -1,75 +1,86 @@
 package com.calculator.app
 
 import android.os.Bundle
-import android.widget.Button
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
+import com.calculator.app.databinding.ActivityMainBinding
+import kotlin.math.*
 
 class MainActivity : AppCompatActivity() {
 
-    private lateinit var display: TextView
-    private var a = ""
-    private var b = ""
-    private var op = ""
+    private lateinit var b: ActivityMainBinding
+    private var expression = ""
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_main)
+        b = ActivityMainBinding.inflate(layoutInflater)
+        setContentView(b.root)
 
-        display = findViewById(R.id.display)
+        val buttons = listOf(
+            b.btn0, b.btn1, b.btn2, b.btn3, b.btn4,
+            b.btn5, b.btn6, b.btn7, b.btn8, b.btn9,
+            b.btnPlus, b.btnMinus, b.btnMul, b.btnDiv,
+            b.btnDot, b.btnPercent
+        )
 
-        fun num(v: String) {
-            if (op.isEmpty()) {
-                a += v
-                display.text = a
-            } else {
-                b += v
-                display.text = "$a $op $b"
+        buttons.forEach {
+            it.setOnClickListener { add(it.text.toString()) }
+        }
+
+        b.btnClear.setOnClickListener {
+            expression = ""
+            b.display.text = "0"
+        }
+
+        b.btnEqual.setOnClickListener {
+            try {
+                val result = eval(expression)
+                b.display.text = result.toString()
+                expression = result.toString()
+            } catch (e: Exception) {
+                b.display.text = "Error"
+                expression = ""
             }
         }
+    }
 
-        listOf(
-            R.id.btn0 to "0", R.id.btn1 to "1", R.id.btn2 to "2",
-            R.id.btn3 to "3", R.id.btn4 to "4", R.id.btn5 to "5",
-            R.id.btn6 to "6", R.id.btn7 to "7", R.id.btn8 to "8",
-            R.id.btn9 to "9"
-        ).forEach { (id, v) ->
-            findViewById<Button>(id).setOnClickListener { num(v) }
-        }
+    private fun add(value: String) {
+        expression += value
+        b.display.text = expression
+    }
 
-        fun operator(o: String) {
-            if (a.isNotEmpty()) {
-                op = o
-                display.text = "$a $op"
-            }
-        }
-
-        findViewById<Button>(R.id.btnAdd).setOnClickListener { operator("+") }
-        findViewById<Button>(R.id.btnSub).setOnClickListener { operator("-") }
-        findViewById<Button>(R.id.btnMul).setOnClickListener { operator("×") }
-        findViewById<Button>(R.id.btnDiv).setOnClickListener { operator("÷") }
-
-        findViewById<Button>(R.id.btnEq).setOnClickListener {
-            if (a.isNotEmpty() && b.isNotEmpty()) {
-                val x = a.toDouble()
-                val y = b.toDouble()
-                val r = when (op) {
-                    "+" -> x + y
-                    "-" -> x - y
-                    "×" -> x * y
-                    "÷" -> if (y != 0.0) x / y else 0.0
-                    else -> 0.0
+    // SIMPLE MATH PARSER (Android-safe)
+    private fun eval(expr: String): Double {
+        return object {
+            var i = 0
+            fun parse(): Double {
+                var x = term()
+                while (i < expr.length) {
+                    when (expr[i]) {
+                        '+' -> { i++; x += term() }
+                        '-' -> { i++; x -= term() }
+                        else -> return x
+                    }
                 }
-                display.text = r.toString()
-                a = r.toString()
-                b = ""
-                op = ""
+                return x
             }
-        }
-
-        findViewById<Button>(R.id.btnAC).setOnClickListener {
-            a = ""; b = ""; op = ""
-            display.text = "0"
-        }
+            fun term(): Double {
+                var x = factor()
+                while (i < expr.length) {
+                    when (expr[i]) {
+                        '×' -> { i++; x *= factor() }
+                        '÷' -> { i++; x /= factor() }
+                        '%' -> { i++; x %= factor() }
+                        else -> return x
+                    }
+                }
+                return x
+            }
+            fun factor(): Double {
+                val start = i
+                while (i < expr.length && (expr[i].isDigit() || expr[i]=='.')) i++
+                return expr.substring(start, i).toDouble()
+            }
+        }.parse()
     }
 }
