@@ -1,0 +1,44 @@
+name: Android Ultra Fast
+
+on:
+  push:
+    branches: [ "main" ]
+  workflow_dispatch:
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: JDK 17 (cached)
+        uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: 17
+          cache: gradle
+
+      - name: Android SDK (cached)
+        uses: actions/cache@v4
+        with:
+          path: |
+            ~/.android
+            ~/Android/Sdk
+            ~/.gradle
+          key: ultra-${{ runner.os }}-${{ hashFiles('**/*.gradle*','**/*.kt') }}
+
+      - name: Setup Android SDK
+        uses: android-actions/setup-android@v3
+
+      - name: Build Debug APK
+        run: |
+          chmod +x gradlew
+          ./gradlew assembleDebug --daemon --parallel --no-configuration-cache
+
+      - name: Upload APK
+        uses: actions/upload-artifact@v4
+        with:
+          name: app-debug
+          path: app/build/outputs/apk/debug/app-debug.apk
