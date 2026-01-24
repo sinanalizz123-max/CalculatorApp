@@ -4,6 +4,9 @@ plugins {
 }
 
 android {
+    buildFeatures {
+        viewBinding true
+    }
     namespace "com.calculator.app"
     compileSdk 34
     buildToolsVersion "33.0.2"
