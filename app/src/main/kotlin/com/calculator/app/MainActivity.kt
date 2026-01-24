@@ -1,6 +1,7 @@
 package com.calculator.app
 
 import android.os.Bundle
+import android.view.HapticFeedbackConstants
 import androidx.appcompat.app.AppCompatActivity
 import com.calculator.app.databinding.ActivityMainBinding
 
@@ -23,20 +24,23 @@ class MainActivity : AppCompatActivity() {
 
         buttons.forEach { btn ->
             btn.setOnClickListener {
+                press(btn)
                 append(btn.text.toString())
             }
         }
 
         b.btnClear.setOnClickListener {
+            press(b.btnClear)
             expr = ""
             b.display.text = "0"
         }
 
         b.btnEqual.setOnClickListener {
+            press(b.btnEqual)
             try {
-                val result = eval(expr)
-                b.display.text = result.toString()
-                expr = result.toString()
+                val r = eval(expr)
+                b.display.text = r.toString()
+                expr = r.toString()
             } catch (e: Exception) {
                 b.display.text = "Error"
                 expr = ""
@@ -44,8 +48,15 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
-    private fun append(v: String) {
-        expr += v
+    private fun press(v: android.view.View) {
+        v.performHapticFeedback(HapticFeedbackConstants.KEYBOARD_TAP)
+        v.animate().scaleX(0.96f).scaleY(0.96f).setDuration(80).withEndAction {
+            v.animate().scaleX(1f).scaleY(1f).setDuration(120).start()
+        }.start()
+    }
+
+    private fun append(s: String) {
+        expr += s
         b.display.text = expr
     }
 

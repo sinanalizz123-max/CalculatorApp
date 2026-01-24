@@ -1,0 +1,7 @@
+<resources>
+    <color name="bg_dark">#0E0E0E</color>
+    <color name="btn_dark">#1C1C1C</color>
+    <color name="btn_op">#2A1F1B</color>
+    <color name="btn_eq">#F5E6D3</color>
+    <color name="text_primary">#EDEDED</color>
+</resources>

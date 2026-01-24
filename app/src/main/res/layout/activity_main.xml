@@ -1,59 +1,65 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:orientation="vertical"
-    android:background="#0E0E0E"
-    android:padding="16dp"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:background="@color/bg_dark">
 
+    <!-- Display -->
     <TextView
         android:id="@+id/display"
-        android:text="0"
-        android:textColor="#EDEDED"
-        android:textSize="42sp"
-        android:gravity="end|center_vertical"
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        android:layout_weight="1"/>
+        android:layout_weight="0.35"
+        android:gravity="end|bottom"
+        android:padding="24dp"
+        android:text="0"
+        android:textSize="36sp"
+        android:textColor="@color/text_primary" />
 
+    <!-- Buttons -->
     <GridLayout
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="0.65"
         android:columnCount="4"
         android:rowCount="5"
-        android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:layout_weight="4"
-        android:useDefaultMargins="true">
+        android:useDefaultMargins="true"
+        android:padding="12dp">
 
         <!-- Row 1 -->
-        <Button style="@style/CalcBtn" android:id="@+id/btnClear" android:text="AC"/>
-        <Button style="@style/CalcBtn" android:id="@+id/btnPercent" android:text="%"/>
-        <Button style="@style/CalcBtn" android:id="@+id/btnDiv" android:text="÷"/>
-        <Button style="@style/CalcBtnOp" android:id="@+id/btn7" android:text="7"/>
+        <Button style="@style/CalcBtn" android:text="AC"/>
+        <Button style="@style/CalcBtn" android:text="%"/>
+        <Button style="@style/CalcBtn" android:text="÷"/>
+        <Button style="@style/CalcBtn" android:text="⌫"/>
 
         <!-- Row 2 -->
-        <Button style="@style/CalcBtn" android:id="@+id/btn8" android:text="8"/>
-        <Button style="@style/CalcBtn" android:id="@+id/btn9" android:text="9"/>
-        <Button style="@style/CalcBtn" android:id="@+id/btnMul" android:text="×"/>
-        <Button style="@style/CalcBtn" android:id="@+id/btn4" android:text="4"/>
+        <Button style="@style/CalcBtn" android:text="7"/>
+        <Button style="@style/CalcBtn" android:text="8"/>
+        <Button style="@style/CalcBtn" android:text="9"/>
+        <Button style="@style/OpBtn" android:text="×"/>
 
         <!-- Row 3 -->
-        <Button style="@style/CalcBtn" android:id="@+id/btn5" android:text="5"/>
-        <Button style="@style/CalcBtn" android:id="@+id/btn6" android:text="6"/>
-        <Button style="@style/CalcBtn" android:id="@+id/btnMinus" android:text="−"/>
-        <Button style="@style/CalcBtn" android:id="@+id/btn1" android:text="1"/>
+        <Button style="@style/CalcBtn" android:text="4"/>
+        <Button style="@style/CalcBtn" android:text="5"/>
+        <Button style="@style/CalcBtn" android:text="6"/>
+        <Button style="@style/OpBtn" android:text="−"/>
 
         <!-- Row 4 -->
-        <Button style="@style/CalcBtn" android:id="@+id/btn2" android:text="2"/>
-        <Button style="@style/CalcBtn" android:id="@+id/btn3" android:text="3"/>
-        <Button style="@style/CalcBtn" android:id="@+id/btnPlus" android:text="+"/>
-        <Button style="@style/CalcBtnEq" android:id="@+id/btnEqual" android:text="="/>
+        <Button style="@style/CalcBtn" android:text="1"/>
+        <Button style="@style/CalcBtn" android:text="2"/>
+        <Button style="@style/CalcBtn" android:text="3"/>
+        <Button style="@style/OpBtn" android:text="+"/>
 
         <!-- Row 5 -->
-        <Button style="@style/CalcBtnWide"
-            android:id="@+id/btn0"
+        <Button
+            style="@style/CalcBtn"
             android:text="0"
             android:layout_columnSpan="2"/>
-        <Button style="@style/CalcBtn" android:id="@+id/btnDot" android:text="."/>
+
+        <Button style="@style/CalcBtn" android:text="."/>
+        <Button style="@style/EqBtn" android:text="="/>
+
     </GridLayout>
 
 </LinearLayout>
