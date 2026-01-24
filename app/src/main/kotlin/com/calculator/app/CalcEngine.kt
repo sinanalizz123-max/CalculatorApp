@@ -4,19 +4,24 @@ import java.math.BigDecimal
 import java.math.MathContext
 
 object CalcEngine {
-    private val mc = MathContext.DECIMAL128
-    var value = BigDecimal.ZERO
+    private val mc = MathContext.UNLIMITED
 
-    fun set(v: BigDecimal) {
-        value = v
-    }
+    fun eval(expr: String): BigDecimal {
+        val tokens = Regex("([+\\-×÷%])").split(expr)
+        val ops = Regex("[^+\\-×÷%]").replace(expr, "").toCharArray()
 
-    fun add(v: BigDecimal) { value = value.add(v, mc) }
-    fun sub(v: BigDecimal) { value = value.subtract(v, mc) }
-    fun mul(v: BigDecimal) { value = value.multiply(v, mc) }
-    fun div(v: BigDecimal) { value = value.divide(v, mc) }
-
-    fun display(): String {
-        return value.stripTrailingZeros().toEngineeringString()
+        var result = BigDecimal(tokens[0], mc)
+        for (i in ops.indices) {
+            val next = BigDecimal(tokens[i + 1], mc)
+            result = when (ops[i]) {
+                '+' -> result.add(next, mc)
+                '-' -> result.subtract(next, mc)
+                '×' -> result.multiply(next, mc)
+                '÷' -> result.divide(next, mc)
+                '%' -> result.remainder(next, mc)
+                else -> result
+            }
+        }
+        return result
     }
 }
