@@ -1,7 +1,7 @@
 <resources>
-    <color name="bg_dark">#0F0C0A</color>
-    <color name="btn_dark">#2B1E18</color>
-    <color name="btn_op">#3A241A</color>
-    <color name="btn_eq">#C9A27C</color>
-    <color name="text_primary">#EFE7E1</color>
+    <color name="bg_dark">#0E0E0E</color>
+    <color name="btn_dark">#6a4c3c</color>
+    <color name="btn_op">#6a4c3c</color>
+    <color name="btn_eq">#E6D3C2</color>
+    <color name="text_primary">#F2F2F2</color>
 </resources>
