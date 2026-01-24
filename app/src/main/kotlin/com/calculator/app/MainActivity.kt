@@ -1,15 +1,13 @@
 package com.calculator.app
 
 import android.os.Bundle
-import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
 import com.calculator.app.databinding.ActivityMainBinding
-import kotlin.math.*
 
 class MainActivity : AppCompatActivity() {
 
     private lateinit var b: ActivityMainBinding
-    private var expression = ""
+    private var expr = ""
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -23,40 +21,41 @@ class MainActivity : AppCompatActivity() {
             b.btnDot, b.btnPercent
         )
 
-        buttons.forEach {
-            it.setOnClickListener { add(it.text.toString()) }
+        buttons.forEach { btn ->
+            btn.setOnClickListener {
+                append(btn.text.toString())
+            }
         }
 
         b.btnClear.setOnClickListener {
-            expression = ""
+            expr = ""
             b.display.text = "0"
         }
 
         b.btnEqual.setOnClickListener {
             try {
-                val result = eval(expression)
+                val result = eval(expr)
                 b.display.text = result.toString()
-                expression = result.toString()
+                expr = result.toString()
             } catch (e: Exception) {
                 b.display.text = "Error"
-                expression = ""
+                expr = ""
             }
         }
     }
 
-    private fun add(value: String) {
-        expression += value
-        b.display.text = expression
+    private fun append(v: String) {
+        expr += v
+        b.display.text = expr
     }
 
-    // SIMPLE MATH PARSER (Android-safe)
-    private fun eval(expr: String): Double {
+    private fun eval(s: String): Double {
         return object {
             var i = 0
             fun parse(): Double {
                 var x = term()
-                while (i < expr.length) {
-                    when (expr[i]) {
+                while (i < s.length) {
+                    when (s[i]) {
                         '+' -> { i++; x += term() }
                         '-' -> { i++; x -= term() }
                         else -> return x
@@ -66,8 +65,8 @@ class MainActivity : AppCompatActivity() {
             }
             fun term(): Double {
                 var x = factor()
-                while (i < expr.length) {
-                    when (expr[i]) {
+                while (i < s.length) {
+                    when (s[i]) {
                         '×' -> { i++; x *= factor() }
                         '÷' -> { i++; x /= factor() }
                         '%' -> { i++; x %= factor() }
@@ -78,8 +77,8 @@ class MainActivity : AppCompatActivity() {
             }
             fun factor(): Double {
                 val start = i
-                while (i < expr.length && (expr[i].isDigit() || expr[i]=='.')) i++
-                return expr.substring(start, i).toDouble()
+                while (i < s.length && (s[i].isDigit() || s[i] == '.')) i++
+                return s.substring(start, i).toDouble()
             }
         }.parse()
     }
