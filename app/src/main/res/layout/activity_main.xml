@@ -24,42 +24,41 @@
         android:layout_weight="0.65"
         android:columnCount="4"
         android:rowCount="5"
-        android:useDefaultMargins="true"
         android:padding="12dp">
 
         <!-- Row 1 -->
-        <Button style="@style/CalcBtn" android:text="AC"/>
-        <Button style="@style/CalcBtn" android:text="%"/>
-        <Button style="@style/CalcBtn" android:text="÷"/>
-        <Button style="@style/CalcBtn" android:text="⌫"/>
+        <Button android:id="@+id/btnClear" style="@style/CalcBtn" android:text="AC"/>
+        <Button android:id="@+id/btnPercent" style="@style/CalcBtn" android:text="%"/>
+        <Button android:id="@+id/btnDiv" style="@style/OpBtn" android:text="÷"/>
+        <Button android:id="@+id/btnBack" style="@style/CalcBtn" android:text="⌫"/>
 
         <!-- Row 2 -->
-        <Button style="@style/CalcBtn" android:text="7"/>
-        <Button style="@style/CalcBtn" android:text="8"/>
-        <Button style="@style/CalcBtn" android:text="9"/>
-        <Button style="@style/OpBtn" android:text="×"/>
+        <Button android:id="@+id/btn7" style="@style/CalcBtn" android:text="7"/>
+        <Button android:id="@+id/btn8" style="@style/CalcBtn" android:text="8"/>
+        <Button android:id="@+id/btn9" style="@style/CalcBtn" android:text="9"/>
+        <Button android:id="@+id/btnMul" style="@style/OpBtn" android:text="×"/>
 
         <!-- Row 3 -->
-        <Button style="@style/CalcBtn" android:text="4"/>
-        <Button style="@style/CalcBtn" android:text="5"/>
-        <Button style="@style/CalcBtn" android:text="6"/>
-        <Button style="@style/OpBtn" android:text="−"/>
+        <Button android:id="@+id/btn4" style="@style/CalcBtn" android:text="4"/>
+        <Button android:id="@+id/btn5" style="@style/CalcBtn" android:text="5"/>
+        <Button android:id="@+id/btn6" style="@style/CalcBtn" android:text="6"/>
+        <Button android:id="@+id/btnMinus" style="@style/OpBtn" android:text="−"/>
 
         <!-- Row 4 -->
-        <Button style="@style/CalcBtn" android:text="1"/>
-        <Button style="@style/CalcBtn" android:text="2"/>
-        <Button style="@style/CalcBtn" android:text="3"/>
-        <Button style="@style/OpBtn" android:text="+"/>
+        <Button android:id="@+id/btn1" style="@style/CalcBtn" android:text="1"/>
+        <Button android:id="@+id/btn2" style="@style/CalcBtn" android:text="2"/>
+        <Button android:id="@+id/btn3" style="@style/CalcBtn" android:text="3"/>
+        <Button android:id="@+id/btnPlus" style="@style/OpBtn" android:text="+"/>
 
         <!-- Row 5 -->
         <Button
+            android:id="@+id/btn0"
             style="@style/CalcBtn"
             android:text="0"
             android:layout_columnSpan="2"/>
 
-        <Button style="@style/CalcBtn" android:text="."/>
-        <Button style="@style/EqBtn" android:text="="/>
+        <Button android:id="@+id/btnDot" style="@style/CalcBtn" android:text="."/>
+        <Button android:id="@+id/btnEqual" style="@style/EqBtn" android:text="="/>
 
     </GridLayout>
-
 </LinearLayout>
