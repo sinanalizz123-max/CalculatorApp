@@ -29,3 +29,9 @@ jobs:
 
       - name: Build APK (no cache, fresh)
         run: ./gradlew assembleDebug --no-daemon --no-build-cache --rerun-tasks
+
+      - name: Upload APK
+        uses: actions/upload-artifact@v4
+        with:
+          name: CalculatorApp-APK
+          path: app/build/outputs/apk/debug/app-debug.apk
