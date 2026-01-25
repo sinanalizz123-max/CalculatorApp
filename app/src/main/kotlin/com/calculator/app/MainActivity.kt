@@ -100,6 +100,8 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun invalid() {
+    b.root.performHapticFeedback(HapticFeedbackConstants.KEYBOARD_TAP)
+}
         b.root.performHapticFeedback(HapticFeedbackConstants.KEYBOARD_TAP)
         b.root.performHapticFeedback(HapticFeedbackConstants.KEYBOARD_TAP)
     }
