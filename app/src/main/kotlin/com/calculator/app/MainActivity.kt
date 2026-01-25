@@ -5,86 +5,64 @@ import android.view.HapticFeedbackConstants
 import android.view.View
 import androidx.appcompat.app.AppCompatActivity
 import com.calculator.app.databinding.ActivityMainBinding
-import java.math.BigDecimal
-import java.math.MathContext
 
 class MainActivity : AppCompatActivity() {
 
     private lateinit var b: ActivityMainBinding
-
-    private val mc = MathContext.DECIMAL128
-    private var accumulator = BigDecimal.ZERO
-    private var currentInput = ""
-    private var pendingOp: Char? = null
+    private var expr = ""
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         b = ActivityMainBinding.inflate(layoutInflater)
         setContentView(b.root)
 
-        val numButtons = listOf(
-            b.btn0, b.btn1, b.btn2, b.btn3, b.btn4,
-            b.btn5, b.btn6, b.btn7, b.btn8, b.btn9, b.btnDot
+        val buttons = listOf(
+            b.btn0,b.btn1,b.btn2,b.btn3,b.btn4,
+            b.btn5,b.btn6,b.btn7,b.btn8,b.btn9,
+            b.btnPlus,b.btnMinus,b.btnMul,b.btnDiv,
+            b.btnDot,b.btnPercent
         )
 
-        numButtons.forEach { btn ->
+        buttons.forEach { btn ->
             btn.setOnClickListener {
-                press(it)
-                currentInput += btn.text.toString()
-                b.display.text = currentInput
+                haptic(it)
+                append(btn.text.toString())
             }
-        }
-
-        fun operator(op: Char) {
-            press(b.root)
-            if (currentInput.isNotEmpty()) {
-                val value = BigDecimal(currentInput)
-                accumulator = if (pendingOp == null) value else apply(accumulator, value)
-                currentInput = ""
-            }
-            pendingOp = op
-            b.display.text = accumulator.toEngineeringString()
-        }
-
-        b.btnPlus.setOnClickListener { operator('+') }
-        b.btnMinus.setOnClickListener { operator('-') }
-        b.btnMul.setOnClickListener { operator('×') }
-        b.btnDiv.setOnClickListener { operator('÷') }
-
-        b.btnEqual.setOnClickListener {
-            press(it)
-            if (currentInput.isNotEmpty() && pendingOp != null) {
-                val value = BigDecimal(currentInput)
-                accumulator = apply(accumulator, value)
-            }
-            currentInput = ""
-            pendingOp = null
-            b.display.text = accumulator.toEngineeringString()
         }
 
         b.btnClear.setOnClickListener {
-            press(it)
-            accumulator = BigDecimal.ZERO
-            currentInput = ""
-            pendingOp = null
+            haptic(it)
+            expr = ""
             b.display.text = "0"
         }
-    }
 
-    private fun apply(a: BigDecimal, b: BigDecimal): BigDecimal {
-        return when (pendingOp) {
-            '+' -> a.add(b, mc)
-            '-' -> a.subtract(b, mc)
-            '×' -> a.multiply(b, mc)
-            '÷' -> a.divide(b, mc)
-            else -> a
+        b.btnEqual.setOnClickListener {
+            haptic(it)
+            try {
+                val r = eval(expr)
+                b.display.text = r
+                expr = r
+            } catch (e: Exception) {
+                b.display.text = "Error"
+                expr = ""
+            }
         }
     }
 
-    private fun press(v: View) {
+    private fun haptic(v: View) {
         v.performHapticFeedback(HapticFeedbackConstants.KEYBOARD_TAP)
-        v.animate().scaleX(0.96f).scaleY(0.96f).setDuration(80).withEndAction {
-            v.animate().scaleX(1f).scaleY(1f).setDuration(120).start()
-        }.start()
+    }
+
+    private fun append(v: String) {
+        expr += v
+        b.display.text = expr
+    }
+
+    private fun eval(s: String): String {
+        return java.math.BigDecimal(s
+            .replace("×","*")
+            .replace("÷","/"))
+            .stripTrailingZeros()
+            .toPlainString()
     }
 }
