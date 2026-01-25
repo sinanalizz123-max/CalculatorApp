@@ -17,20 +17,28 @@ jobs:
           distribution: temurin
           java-version: 17
 
+      - name: Restore keystore
+        run: |
+          mkdir -p keystore
+          echo "${{ secrets.KEYSTORE_FILE }}" | base64 -d > keystore/release.keystore
+          cat > keystore/keystore.properties <<EOF2
+          storeFile=keystore/release.keystore
+          storePassword=${{ secrets.KEYSTORE_PASSWORD }}
+          keyAlias=release
+          keyPassword=${{ secrets.KEY_PASSWORD }}
+          EOF2
+
       - name: Clean caches
         run: |
-          rm -rf ~/.gradle
-          rm -rf ~/.android
-          rm -rf app/build
-          rm -rf build
+          rm -rf ~/.gradle ~/.android app/build build
 
       - name: Grant execute permission
         run: chmod +x gradlew
 
-      - name: Build RELEASE APK
+      - name: Build SIGNED RELEASE
         run: ./gradlew assembleRelease --no-daemon --no-build-cache --rerun-tasks
 
-      - name: Upload RELEASE APK
+      - name: Upload APK
         uses: actions/upload-artifact@v4
         with:
           name: CalculatorApp-release
