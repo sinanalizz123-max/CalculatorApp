@@ -6,7 +6,6 @@ import android.view.View
 import androidx.appcompat.app.AppCompatActivity
 import com.calculator.app.databinding.ActivityMainBinding
 import java.math.BigDecimal
-import java.math.MathContext
 
 class MainActivity : AppCompatActivity() {
 
@@ -18,71 +17,43 @@ class MainActivity : AppCompatActivity() {
         b = ActivityMainBinding.inflate(layoutInflater)
         setContentView(b.root)
 
-        val buttons = listOf(
-            b.btn0,b.btn1,b.btn2,b.btn3,b.btn4,
-            b.btn5,b.btn6,b.btn7,b.btn8,b.btn9,
-            b.btnPlus,b.btnMinus,b.btnMul,b.btnDiv,
-            b.btnDot,b.btnPercent
-        )
+        val nums = listOf(b.btn0,b.btn1,b.btn2,b.btn3,b.btn4,b.btn5,b.btn6,b.btn7,b.btn8,b.btn9,b.btnDot)
+        val ops = listOf(b.btnPlus,b.btnMinus,b.btnMul,b.btnDiv,b.btnPercent)
 
-        buttons.forEach {
+        nums.forEach {
+            it.setOnClickListener { press(it); expr += it.text; b.display.text = expr }
+        }
+
+        ops.forEach {
             it.setOnClickListener {
-                haptic(it)
-                append((it as android.widget.Button).text.toString())
+                if (expr.isEmpty() || "+-×÷%".contains(expr.last())) {
+                    errorHaptic(it); return@setOnClickListener
+                }
+                press(it); expr += it.text; b.display.text = expr
             }
         }
 
         b.btnClear.setOnClickListener {
-            haptic(it)
-            expr = ""
-            b.display.text = "0"
+            press(it); expr=""; b.display.text="0"
         }
 
         b.btnEqual.setOnClickListener {
-            haptic(it)
+            press(it)
             try {
-                val result = eval(expr)
-                b.display.text = result
-                expr = result
+                val r = BigDecimal(expr.replace("×","*").replace("÷","/"))
+                b.display.text = r.stripTrailingZeros().toPlainString()
+                expr = b.display.text.toString()
             } catch (e: Exception) {
-                b.display.text = "Error"
-                expr = ""
+                errorHaptic(it); b.display.text="Error"; expr=""
             }
         }
     }
 
-    private fun haptic(v: View) {
+    private fun press(v: View) =
         v.performHapticFeedback(HapticFeedbackConstants.KEYBOARD_TAP)
-    }
 
-    private fun append(v: String) {
-        expr += v
-        b.display.text = expr
-    }
-
-    // ✔ REAL BigDecimal evaluation (no doubles, no scientific loss)
-    private fun eval(input: String): String {
-        val tokens = input
-            .replace("×", "*")
-            .replace("÷", "/")
-            .split(Regex("(?=[+\\-*/])|(?<=[+\\-*/])"))
-
-        var result = BigDecimal(tokens[0])
-        var i = 1
-
-        while (i < tokens.size) {
-            val op = tokens[i]
-            val num = BigDecimal(tokens[i + 1])
-            result = when (op) {
-                "+" -> result.add(num)
-                "-" -> result.subtract(num)
-                "*" -> result.multiply(num)
-                "/" -> result.divide(num, MathContext.DECIMAL128)
-                else -> result
-            }
-            i += 2
-        }
-
-        return result.stripTrailingZeros().toPlainString()
+    private fun errorHaptic(v: View) {
+        v.performHapticFeedback(HapticFeedbackConstants.KEYBOARD_TAP)
+        v.postDelayed({ v.performHapticFeedback(HapticFeedbackConstants.KEYBOARD_TAP) }, 60)
     }
 }
