@@ -86,19 +86,6 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
-    private fun eval(input: String): String {
-        val s = input
-            .replace("×", "*")
-            .replace("÷", "/")
-            .replace("%", "/100")
-
-        return BigDecimalCalculator
-            .eval(s)
-            .stripTrailingZeros()
-            .toPlainString()
-    }
-
-    private fun haptic(v: View) {
         v.performHapticFeedback(HapticFeedbackConstants.KEYBOARD_TAP)
     }
 
@@ -108,3 +95,18 @@ class MainActivity : AppCompatActivity() {
 
     private fun Char.isOperator() = this in "+-×÷%"
 }
+
+    private fun eval(input: String): String {
+        var s = input
+            .replace("×", "*")
+            .replace("÷", "/")
+
+        // percent: 100×10% -> 100*(10/100)
+        s = Regex("(\\d+\\.?\\d*)%").replace(s) {
+            "(" + it.groupValues[1] + "/100)"
+        }
+
+        val r = BigDecimalCalculator.eval(s)
+        return r.stripTrailingZeros().toPlainString()
+    }
+
