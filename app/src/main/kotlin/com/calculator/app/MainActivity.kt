@@ -5,6 +5,8 @@ import android.view.HapticFeedbackConstants
 import android.view.View
 import androidx.appcompat.app.AppCompatActivity
 import com.calculator.app.databinding.ActivityMainBinding
+import java.math.BigDecimal
+import java.math.MathContext
 
 class MainActivity : AppCompatActivity() {
 
@@ -21,13 +23,6 @@ class MainActivity : AppCompatActivity() {
             b.btn5,b.btn6,b.btn7,b.btn8,b.btn9,b.btnDot
         )
 
-        val ops = mapOf(
-            b.btnPlus to "+",
-            b.btnMinus to "-",
-            b.btnMul to "×",
-            b.btnDiv to "÷"
-        )
-
         nums.forEach { btn ->
             btn.setOnClickListener {
                 haptic(it)
@@ -36,7 +31,12 @@ class MainActivity : AppCompatActivity() {
             }
         }
 
-        ops.forEach { (btn, op) ->
+        mapOf(
+            b.btnPlus to "+",
+            b.btnMinus to "-",
+            b.btnMul to "×",
+            b.btnDiv to "÷"
+        ).forEach { (btn, op) ->
             btn.setOnClickListener {
                 if (expr.isEmpty() || expr.last().isOperator()) {
                     invalid()
@@ -75,13 +75,23 @@ class MainActivity : AppCompatActivity() {
         b.btnEqual.setOnClickListener {
             try {
                 haptic(it)
-                val r = eval(expr)
-                b.display.text = r
-                expr = r
-            } catch (_: Exception) {
+                val result = eval(expr)
+                expr = result
+                b.display.text = result
+            } catch (e: Exception) {
                 invalid()
             }
         }
+    }
+
+    private fun eval(input: String): String {
+        var s = input
+            .replace("×", "*")
+            .replace("÷", "/")
+            .replace("%", "/100")
+
+        val r = BigDecimalCalculator.eval(s)
+        return r.stripTrailingZeros().toPlainString()
     }
 
     private fun haptic(v: View) {
@@ -94,15 +104,4 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun Char.isOperator() = this in "+-×÷%"
-
-    private fun eval(input: String): String {
-        val normalized = input
-            .replace("×", "*")
-            .replace("÷", "/")
-            .replace("%", "/100")
-
-        return BigDecimalCalculator.eval(normalized)
-            .stripTrailingZeros()
-            .toPlainString()
-    }
 }
