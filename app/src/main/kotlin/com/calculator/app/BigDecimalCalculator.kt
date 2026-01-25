@@ -8,36 +8,39 @@ object BigDecimalCalculator {
     private val mc = MathContext.DECIMAL128
 
     fun eval(expr: String): BigDecimal {
+        var result = BigDecimal.ZERO
+        var current = BigDecimal.ZERO
+        var op = '+'
+
         var i = 0
-        var result = readNumber(expr, ::i)
-
         while (i < expr.length) {
-            val op = expr[i]
-            i++
-            val next = readNumber(expr, ::i)
+            val c = expr[i]
 
-            result = when (op) {
-                '+' -> result.add(next, mc)
-                '-' -> result.subtract(next, mc)
-                '*' -> result.multiply(next, mc)
-                '/' -> result.divide(next, mc)
-                else -> result
+            if (c.isDigit() || c == '.') {
+                val start = i
+                while (i < expr.length && (expr[i].isDigit() || expr[i] == '.')) i++
+                current = BigDecimal(expr.substring(start, i), mc)
+                continue
             }
+
+            when (op) {
+                '+' -> result = result.add(current, mc)
+                '-' -> result = result.subtract(current, mc)
+                '*' -> result = result.multiply(current, mc)
+                '/' -> result = result.divide(current, mc)
+            }
+
+            op = c
+            i++
         }
+
+        when (op) {
+            '+' -> result = result.add(current, mc)
+            '-' -> result = result.subtract(current, mc)
+            '*' -> result = result.multiply(current, mc)
+            '/' -> result = result.divide(current, mc)
+        }
+
         return result
-    }
-
-    private fun readNumber(s: String, idx: () -> Int): BigDecimal {
-        var i = idx()
-        val start = i
-        while (i < s.length && (s[i].isDigit() || s[i] == '.')) i++
-        setIdx(idx, i)
-        return BigDecimal(s.substring(start, i), mc)
-    }
-
-    private fun setIdx(get: () -> Int, value: Int) {
-        val field = get.javaClass.getDeclaredField("value")
-        field.isAccessible = true
-        field.setInt(get, value)
     }
 }
