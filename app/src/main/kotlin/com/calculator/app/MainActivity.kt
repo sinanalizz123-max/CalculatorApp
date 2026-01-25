@@ -71,6 +71,10 @@ class MainActivity : AppCompatActivity() {
         }
 
         b.btnEqual.setOnClickListener {
+            if (expr.isEmpty() || expr.last().isOperator()) {
+                invalid()
+                return@setOnClickListener
+            }
             try {
                 haptic(it)
                 val result = eval(expr)
@@ -88,8 +92,10 @@ class MainActivity : AppCompatActivity() {
             .replace("÷", "/")
             .replace("%", "/100")
 
-        val r = BigDecimalCalculator.eval(s)
-        return r.stripTrailingZeros().toPlainString()
+        return BigDecimalCalculator
+            .eval(s)
+            .stripTrailingZeros()
+            .toPlainString()
     }
 
     private fun haptic(v: View) {

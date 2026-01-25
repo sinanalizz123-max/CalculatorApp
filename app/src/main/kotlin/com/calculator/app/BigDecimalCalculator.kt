@@ -8,6 +8,9 @@ object BigDecimalCalculator {
     private val mc = MathContext.DECIMAL128
 
     fun eval(expr: String): BigDecimal {
+        require(expr.isNotEmpty()) { "Empty expression" }
+        require(expr.last().isDigit()) { "Expression ends with operator" }
+
         var result = BigDecimal.ZERO
         var current = BigDecimal.ZERO
         var op = '+'
