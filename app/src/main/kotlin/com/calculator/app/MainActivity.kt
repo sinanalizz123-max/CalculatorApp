@@ -3,6 +3,7 @@ package com.calculator.app
 import android.os.Bundle
 import android.view.HapticFeedbackConstants
 import android.view.View
+import android.widget.Button
 import androidx.appcompat.app.AppCompatActivity
 import com.calculator.app.databinding.ActivityMainBinding
 import java.math.BigDecimal
@@ -17,43 +18,51 @@ class MainActivity : AppCompatActivity() {
         b = ActivityMainBinding.inflate(layoutInflater)
         setContentView(b.root)
 
-        val nums = listOf(b.btn0,b.btn1,b.btn2,b.btn3,b.btn4,b.btn5,b.btn6,b.btn7,b.btn8,b.btn9,b.btnDot)
-        val ops = listOf(b.btnPlus,b.btnMinus,b.btnMul,b.btnDiv,b.btnPercent)
+        val buttons: List<Button> = listOf(
+            b.btn0,b.btn1,b.btn2,b.btn3,b.btn4,
+            b.btn5,b.btn6,b.btn7,b.btn8,b.btn9,
+            b.btnPlus,b.btnMinus,b.btnMul,b.btnDiv,
+            b.btnDot,b.btnPercent
+        )
 
-        nums.forEach {
-            it.setOnClickListener { press(it); expr += it.text; b.display.text = expr }
-        }
-
-        ops.forEach {
-            it.setOnClickListener {
-                if (expr.isEmpty() || "+-×÷%".contains(expr.last())) {
-                    errorHaptic(it); return@setOnClickListener
-                }
-                press(it); expr += it.text; b.display.text = expr
+        buttons.forEach { btn ->
+            btn.setOnClickListener {
+                haptic(it)
+                append(btn.text.toString())
             }
         }
 
         b.btnClear.setOnClickListener {
-            press(it); expr=""; b.display.text="0"
+            haptic(it)
+            expr = ""
+            b.display.text = "0"
         }
 
         b.btnEqual.setOnClickListener {
-            press(it)
+            haptic(it)
             try {
-                val r = BigDecimal(expr.replace("×","*").replace("÷","/"))
-                b.display.text = r.stripTrailingZeros().toPlainString()
-                expr = b.display.text.toString()
+                val r = eval(expr)
+                b.display.text = r
+                expr = r
             } catch (e: Exception) {
-                errorHaptic(it); b.display.text="Error"; expr=""
+                b.display.text = "Error"
+                expr = ""
             }
         }
     }
 
-    private fun press(v: View) =
+    private fun haptic(v: View) {
         v.performHapticFeedback(HapticFeedbackConstants.KEYBOARD_TAP)
+    }
 
-    private fun errorHaptic(v: View) {
-        v.performHapticFeedback(HapticFeedbackConstants.KEYBOARD_TAP)
-        v.postDelayed({ v.performHapticFeedback(HapticFeedbackConstants.KEYBOARD_TAP) }, 60)
+    private fun append(v: String) {
+        expr += v
+        b.display.text = expr
+    }
+
+    private fun eval(s: String): String {
+        return BigDecimal(
+            s.replace("×","*").replace("÷","/")
+        ).stripTrailingZeros().toPlainString()
     }
 }
