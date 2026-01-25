@@ -78,6 +78,7 @@ class MainActivity : AppCompatActivity() {
                 val result = eval(expr)
                 expr = result
                 b.display.text = result
+                b.display.text = result
             } catch (e: Exception) {
                 invalid()
             }
