@@ -4,13 +4,25 @@ plugins {
 }
 
 android {
+    namespace "com.calculator.app"
+    compileSdk 34
+
+    defaultConfig {
+        applicationId "com.calculator.app"
+        minSdk 21
+        targetSdk 34
+        versionCode 1
+        versionName "1.0"
+    }
 
     buildTypes {
         release {
             minifyEnabled true
             shrinkResources true
             signingConfig signingConfigs.debug
-            proguardFiles getDefaultProguardFile("proguard-android-optimize.txt"), "proguard-rules.pro"
+            proguardFiles getDefaultProguardFile(
+                "proguard-android-optimize.txt"
+            ), "proguard-rules.pro"
         }
         debug {
             minifyEnabled false
@@ -21,3 +33,17 @@ android {
     buildFeatures {
         viewBinding true
     }
+
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_17
+        targetCompatibility JavaVersion.VERSION_17
+    }
+
+    kotlinOptions {
+        jvmTarget = "17"
+    }
+}
+
+dependencies {
+    implementation "com.google.android.material:material:1.12.0"
+}
