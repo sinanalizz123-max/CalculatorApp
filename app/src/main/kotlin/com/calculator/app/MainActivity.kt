@@ -5,8 +5,6 @@ import android.view.HapticFeedbackConstants
 import android.view.View
 import androidx.appcompat.app.AppCompatActivity
 import com.calculator.app.databinding.ActivityMainBinding
-import java.math.BigDecimal
-import java.math.MathContext
 
 class MainActivity : AppCompatActivity() {
 
@@ -78,7 +76,6 @@ class MainActivity : AppCompatActivity() {
                 val result = eval(expr)
                 expr = result
                 b.display.text = result
-                b.display.text = result
             } catch (e: Exception) {
                 invalid()
             }
@@ -86,7 +83,7 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun eval(input: String): String {
-        var s = input
+        val s = input
             .replace("×", "*")
             .replace("÷", "/")
             .replace("%", "/100")
@@ -100,9 +97,6 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun invalid() {
-    b.root.performHapticFeedback(HapticFeedbackConstants.KEYBOARD_TAP)
-}
-        b.root.performHapticFeedback(HapticFeedbackConstants.KEYBOARD_TAP)
         b.root.performHapticFeedback(HapticFeedbackConstants.KEYBOARD_TAP)
     }
 
