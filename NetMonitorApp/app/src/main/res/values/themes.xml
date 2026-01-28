@@ -1,0 +1,10 @@
+<resources>
+    <style name="Theme.NetMonitor" parent="Theme.Material3.DayNight.NoActionBar">
+    <item name="android:lineSpacingExtra">2dp</item>
+        <item name="android:colorBackground">#121212</item>
+        <item name="colorPrimary">#1FD655</item>
+        <item name="colorSecondary">#00072D</item>
+        <item name="android:statusBarColor">#121212</item>
+        <item name="android:navigationBarColor">#121212</item>
+    </style>
+</resources>

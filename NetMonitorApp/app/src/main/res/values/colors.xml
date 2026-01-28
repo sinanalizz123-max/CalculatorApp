@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <!-- Base -->
+    <color name="bg">#141218</color>
+    <color name="card_bg">#1D1B20</color>
+
+    <!-- Text -->
+    <color name="text_primary">#E6E1E5</color>
+    <color name="text_secondary">#CAC4D0</color>
+
+    <!-- Status -->
+    <color name="status_weak">#EF4444</color>
+    <color name="status_normal">#22C55E</color>
+    <color name="status_good">#3B82F6</color>
+    <color name="status_very_good">#8B5CF6</color>
+
+</resources>

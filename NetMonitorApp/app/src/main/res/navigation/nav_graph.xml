@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/nav_graph"
+    app:startDestination="@id/dashboardFragment"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <fragment
+        android:id="@+id/dashboardFragment"
+        android:name="com.netmonitor.app.DashboardFragment"
+        android:label="Dashboard"/>
+
+    <fragment
+        android:id="@+id/dataFragment"
+        android:name="com.netmonitor.app.DataFragment"
+        android:label="Data"/>
+
+    <fragment
+        android:id="@+id/batteryFragment"
+        android:name="com.netmonitor.app.BatteryFragment"
+        android:label="Battery"/>
+
+    <fragment
+        android:id="@+id/settingsFragment"
+        android:name="com.netmonitor.app.SettingsFragment"
+        android:label="Settings"/>
+
+</navigation>

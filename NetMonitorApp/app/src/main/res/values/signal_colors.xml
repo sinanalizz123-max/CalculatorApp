@@ -1,0 +1,5 @@
+<resources>
+    <color name="signal_weak">#410200</color>
+    <color name="signal_medium">#1FD655</color>
+    <color name="signal_strong">#00072D</color>
+</resources>
